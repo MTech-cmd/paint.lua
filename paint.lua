@@ -117,29 +117,56 @@ local function handleMouseInput(event, button, x, y)
 end
 
 -- Print the Drawing
-function printDrawing()
+-- Print the Drawing
+local function printDrawing()
     local printer = peripheral.find("printer")
     if not printer then
         print("No printer connected!")
         return
     end
 
+    -- Retrieve printer page dimensions
+    local pageWidth, pageHeight = printer.getPageSize()
+
+    -- Start a new page
     printer.newPage()
-    for y = titleBarHeight + 1, height - 2 do
-        local line = ""
-        for x = 1, width do
-            if grid[y][x] == currentColor then
-                line = line .. " "
-            else
-                line = line .. "#"
+    printer.setPageTitle("Paint Drawing")
+
+    -- Determine the number of pages required
+    local drawingHeight = height - 2 - titleBarHeight
+    local pagesRequired = math.ceil(drawingHeight / pageHeight)
+
+    for page = 1, pagesRequired do
+        -- Calculate the starting and ending row for this page
+        local startY = titleBarHeight + 1 + (page - 1) * pageHeight
+        local endY = math.min(startY + pageHeight - 1, height - 2)
+
+        -- Write the content for this page
+        for y = startY, endY do
+            local line = ""
+            for x = 1, width do
+                -- Generate a line of text representing the current row
+                line = line .. (grid[y][x] == currentColor and " " or "#")
             end
+            -- Write the line to the printer
+            printer.write(line)
+            -- Move to the next line on the printer
+            printer.setCursorPos(1, y - startY + 1)
         end
-        printer.write(line)
-        printer.print()
+
+        -- End the page and start a new one if more pages are needed
+        if page < pagesRequired then
+            printer.endPage()
+            printer.newPage()
+            printer.setPageTitle("Paint Drawing - Page " .. page + 1)
+        end
     end
+
+    -- End the final page
     printer.endPage()
     print("Drawing printed!")
 end
+
 
 -- Main Program Loop
 term.clear()
