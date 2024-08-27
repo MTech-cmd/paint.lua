@@ -117,8 +117,7 @@ local function handleMouseInput(event, button, x, y)
 end
 
 -- Print the Drawing
--- Print the Drawing
-local function printDrawing()
+function printDrawing()
     local printer = peripheral.find("printer")
     if not printer then
         print("No printer connected!")
