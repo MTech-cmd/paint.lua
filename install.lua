@@ -1,8 +1,8 @@
 -- install.lua
-local chestMonitorUrl = "https://raw.githubusercontent.com/MTech-cmd/chest-monitor/main/chest_monitor.lua"
+local url = "https://raw.githubusercontent.com/MTech-cmd/paint.lua/main/paint.lua"
 
 print("Downloading paint.lua...")
-local response = http.get(chestMonitorUrl)
+local response = http.get(url)
 
 if response then
     local scriptContent = response.readAll()
