@@ -125,10 +125,10 @@ function printDrawing()
     end
 
     -- Retrieve printer page dimensions
-    local pageWidth, pageHeight = printer.getPageSize()
-
+    
     -- Start a new page
     printer.newPage()
+    local pageWidth, pageHeight = printer.getPageSize()
     printer.setPageTitle("Paint Drawing")
 
     -- Determine the number of pages required
